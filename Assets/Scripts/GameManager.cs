@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI _countTimer;
     [SerializeField, Header("スコアのテキスト")]
     private TextMeshProUGUI _scoreText;
+    [SerializeField, Header("タイマーのテキスト")]
+    private TextMeshProUGUI _timertext;
     [Header("ゲーム始まっているか")]
     private bool _isStarted;
     /// <summary>スコアのプロパティ</summary>
@@ -40,11 +43,20 @@ public class GameManager : MonoBehaviour
         StartCoroutine(CountDownTimer());
         _isStarted = false;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if(_isStarted)
+        {
+            _timertext.gameObject.SetActive(true);
+            _scoreText.gameObject.SetActive(true);
+            _timer -= Time.deltaTime;
+            _timertext.text = $"残り時間:{(int)_timer / 60}:{(_timer % 60).ToString("F2")}";
+        }
+        if(_timer <=0)
+        {
+            _timer = 0;
+            _isStarted = false;
+        }
     }
     /// <summary>カウントダウンのタイマー</summary>
     private IEnumerator CountDownTimer()
@@ -67,5 +79,11 @@ public class GameManager : MonoBehaviour
             }
         }
         yield return null;
+    }
+    /// <summary>スコア加算のメソッド</summary>
+    public void GetItemScore(int score)
+    {
+        _score += score;
+        _scoreText.text = $"Score:{_score.ToString("00000000")}";
     }
 }
