@@ -4,27 +4,31 @@ using UnityEngine;
 
 public class ItemController : MonoBehaviour
 {
-    [SerializeField] float x,y;
-    [SerializeField] float _power;
+    [SerializeField,Header("アイテムを飛ばす方向")] float x,y;
+    [SerializeField,Header("アイテムを飛ばす力")] float _power;
     Rigidbody2D rb;
-    private GameObject player;
     [SerializeField] float min, max;
+    
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindGameObjectWithTag("Player");
-        
+        rb = GetComponent<Rigidbody2D>(); 
     }
     private void Start()
     {
 
         y = Random.Range(min,max);
         rb.AddForce(new Vector2(x, y) * _power,ForceMode2D.Impulse);
-        Destroy(gameObject, 3.5f);
         Debug.Log(y);
     }
-    private void Update()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if (collision.gameObject.CompareTag("Bullet"))
+        {           
+            Destroy(collision.gameObject);
+        }
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
