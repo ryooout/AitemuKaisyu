@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(CountDownTimer());
         _isStarted = false;
+        _score = 0;
     }
     private void Update()
     {
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour
             _timertext.gameObject.SetActive(true);
             _scoreText.gameObject.SetActive(true);
             _timer -= Time.deltaTime;
-            _timertext.text = $"Žc‚èŽžŠÔ:{(int)_timer / 60}:{(_timer % 60).ToString("F2")}";
+            _timertext.text = $"Žc‚èŽžŠÔ:{(int)_timer / 60}:{_timer % 60:F2}";
         }
         if(_timer <=0)
         {
@@ -84,6 +85,6 @@ public class GameManager : MonoBehaviour
     public void GetItemScore(int score)
     {
         _score += score;
-        _scoreText.text = $"Score:{_score.ToString("00000000")}";
+        _scoreText.text = $"Score:{_score}";
     }
 }
