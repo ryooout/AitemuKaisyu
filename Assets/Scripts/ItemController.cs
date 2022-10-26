@@ -5,10 +5,10 @@ using UnityEngine;
 public class ItemController : MonoBehaviour
 {
     [SerializeField,Header("アイテムを飛ばす方向")] float x,y;
-    [SerializeField,Header("アイテムを飛ばす力")] float _power;
+    private float _power;
     Rigidbody2D rb;
-    [SerializeField] float min, max;
-    
+    [SerializeField,Header("y軸にアイテム飛ばす長さの最小,最大")] float min, max;
+    [SerializeField, Header("アイテムや爆弾を飛ばす最小,最大")] float power_min, power_max;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>(); 
@@ -17,6 +17,7 @@ public class ItemController : MonoBehaviour
     {
 
         y = Random.Range(min,max);
+        _power = Random.Range(power_min, power_max);
         rb.AddForce(new Vector2(x, y) * _power,ForceMode2D.Impulse);
         Debug.Log(y);
     }
