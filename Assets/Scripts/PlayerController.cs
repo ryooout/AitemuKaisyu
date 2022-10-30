@@ -45,11 +45,15 @@ public class PlayerController : MonoBehaviour
         if(collision.gameObject.CompareTag("Bullet"))
         {
             GameManager.instance.GetItemScore(200);
+            _speed += 1;
             Destroy(collision.gameObject);
         }
         if(collision.gameObject.CompareTag("Bomb"))
         {
             GameManager.instance.GetItemScore(-300);
+            if(_speed>0)
+            { _speed -= 1; }
+            
             Destroy(collision.gameObject);
         }
     }
