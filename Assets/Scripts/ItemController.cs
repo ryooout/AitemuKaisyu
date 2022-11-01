@@ -23,10 +23,6 @@ public class ItemController : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet"))
-        {           
-            Destroy(collision.gameObject);
-        }
         if(collision.gameObject.CompareTag("Ground"))
         {
             Destroy(this.gameObject);
