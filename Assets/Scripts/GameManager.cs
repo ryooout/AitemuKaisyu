@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    [SerializeField]
+    private PlayerController _playerController;
     [SerializeField, Header("スコア")]
     private int _score;
     [SerializeField, Header("タイマー")]
@@ -17,6 +20,8 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI _scoreText;
     [SerializeField, Header("タイマーのテキスト")]
     private TextMeshProUGUI _timertext;
+    [SerializeField, Header("タイムアップのテキスト")]
+    private TextMeshProUGUI _timeUpText;
     [Header("ゲーム始まっているか")]
     private bool _isStarted;
     /// <summary>スコアのプロパティ</summary>
@@ -25,7 +30,6 @@ public class GameManager : MonoBehaviour
     public float Timer { get => _timer; set => _timer = value; }
     /// <summary>スタートしているかしていないかのプロパティ</summary>
     public bool IsStarted { get => _isStarted; set => _isStarted = value; }
-
     private void Awake()
     {
         if(instance ==null)
@@ -40,6 +44,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        _playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         StartCoroutine(CountDownTimer());
         _isStarted = false;
         _score = 0;
@@ -56,6 +61,8 @@ public class GameManager : MonoBehaviour
         if(_timer <=0)
         {
             _timer = 0;
+            _timeUpText.transform.DOScale(2f, 0.1f).SetEase(Ease.OutElastic);
+            _timeUpText.text = "Time Up!";  
             _isStarted = false;
         }
     }
