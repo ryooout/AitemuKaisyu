@@ -56,12 +56,13 @@ public class GameManager : MonoBehaviour
             _timertext.gameObject.SetActive(true);
             _scoreText.gameObject.SetActive(true);
             _timer -= Time.deltaTime;
-            _timertext.text = $"Žc‚èŽžŠÔ:{(int)_timer / 60}:{_timer % 60:F2}";
+            _timertext.text = $"Žc‚èŽžŠÔ:{(int)_timer / 60:00}:{_timer % 60:00.00}";
         }
         if(_timer <=0)
         {
             _timer = 0;
-            _timeUpText.transform.DOScale(2f, 0.1f).SetEase(Ease.OutElastic);
+            _timeUpText.transform.DOScale(2f, 0.1f);
+            _timeUpText.material.DOColor(Color.red, 0.5f);
             _timeUpText.text = "Time Up!";  
             _isStarted = false;
         }
