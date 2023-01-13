@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         //_animator.SetFloat("Speed", 0);
+        _rb.velocity = Vector2.zero;
+        _animator.SetBool(RunId, false);
     }
 
     // Update is called once per frame
@@ -25,11 +27,6 @@ public class PlayerController : MonoBehaviour
         if(GameManager.instance.IsStarted)
         {
             CharacterMove();
-        }
-        else
-        { 
-            _rb.velocity = Vector2.zero;
-            _animator.SetBool(RunId, false);
         }
     }
 
@@ -56,7 +53,10 @@ public class PlayerController : MonoBehaviour
                 transform.position = new Vector2(-13.8f, transform.position.y);
             }
         }
-
+        if(!Input.anyKey)//âΩÇ‡âüÇ≥ÇÍÇƒÇ¢Ç»Ç¢Ç∆Ç´ÇÕIdleèÛë‘Ç…ëJà⁄Ç∑ÇÈ
+        {
+            _animator.SetBool(RunId, false);
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
