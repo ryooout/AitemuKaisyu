@@ -5,13 +5,16 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField,Header("プレイヤーのスピード")]private float _speed = 5;
+    [SerializeField]
+    ParticleSystem _starParticle = default;
     Rigidbody2D _rb;
     Animator _animator;
     /// <summary>animatorのIdを渡す。</summary>
-    private static readonly int RunId = Animator.StringToHash("Run");
-
+    private readonly int RunId = Animator.StringToHash("Run");
+    private readonly int HitAnimId = Animator.StringToHash("Hit");
     /// <summary>スピードのプロパティ</summary>
     public float Speed { get => _speed; set => _speed = value; }
+    private float x;
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -32,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     void CharacterMove()
     {
-        float x = Input.GetAxis("Horizontal");
+        x = Input.GetAxis("Horizontal");
         _rb.velocity = new Vector2(x * _speed, _rb.velocity.y);
         if(x!=0)
         {
@@ -43,14 +46,6 @@ public class PlayerController : MonoBehaviour
             {
                 lscale.x *= -1;
                 gameObject.transform.localScale = lscale;
-            }
-            if(transform.position.x<=-13.8f)
-            {
-                transform.position = new Vector2(13.8f, transform.position.y);
-            }
-            else if(transform.position.x>=13.8f)
-            {
-                transform.position = new Vector2(-13.8f, transform.position.y);
             }
         }
         if(!Input.anyKey)//何も押されていないときはIdle状態に遷移する
@@ -65,14 +60,23 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.GetItemScore(200);
             _speed += 1;
             Destroy(collision.gameObject);
+            Instantiate(_starParticle, transform);
+            Destroy(_starParticle, 0.5f);
         }
         if(collision.gameObject.CompareTag("Bomb"))
         {
             GameManager.instance.GetItemScore(-300);
+            _animator.SetBool(HitAnimId, true);
+            _rb.velocity = Vector2.zero;
+            Invoke(nameof(DamageAnimActive), 0.2f);
             if(_speed>0)
             { _speed -= 1; }
-            
             Destroy(collision.gameObject);
         }
+    }
+    public void DamageAnimActive()
+    {
+        _animator.SetBool(HitAnimId, false);
+        _rb.velocity = new Vector2(x * _speed, _rb.velocity.y);
     }
 }
