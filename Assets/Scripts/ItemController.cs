@@ -8,7 +8,8 @@ public class ItemController : MonoBehaviour
     private float _power;
     Rigidbody2D rb;
     [SerializeField,Header("y軸にアイテム飛ばす長さの最小,最大")] float min, max;
-    [SerializeField, Header("アイテムや爆弾を飛ばす最小,最大")] float power_min, power_max;
+    [SerializeField, Header("アイテムや爆弾を飛ばす力の最小,最大")] float power_min, power_max;
+    public float Power { get => _power; set => _power = value; }
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>(); 

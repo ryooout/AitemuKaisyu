@@ -10,7 +10,8 @@ public class EffectController : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground")||collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Ground")||collision.gameObject.CompareTag("Player")||
+            collision.gameObject.CompareTag("Bomb")||collision.gameObject.CompareTag("Bullet"))
         {
             // パーティクルシステムのインスタンスを生成する。
             ParticleSystem newParticle = Instantiate(_particle);

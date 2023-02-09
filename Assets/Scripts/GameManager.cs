@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     [SerializeField]
+    private FadeManager _fadeManager = default;
+    [SerializeField]
     private PlayerController _playerController;
     [SerializeField, Header("スコア")]
     private int _score;
@@ -20,10 +22,10 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI _scoreText;
     [SerializeField, Header("タイマーのテキスト")]
     private TextMeshProUGUI _timertext;
-    [SerializeField, Header("タイムアップのテキスト")]
-    private TextMeshProUGUI _timeUpText;
     [Header("ゲーム始まっているか")]
     private bool _isStarted;
+    [SerializeField]
+    private GameObject _timeUpObj = default;
     /// <summary>スコアのプロパティ</summary>
     public int Score { get => _score; set => _score = value; }
     /// <summary>タイマーのプロパティ</summary>
@@ -41,13 +43,13 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-    }
-    void Start()
-    {
         _playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         StartCoroutine(CountDownTimer());
         _isStarted = false;
         _score = 0;
+    }
+    void Start()
+    {
     }
     private void Update()
     {
@@ -60,16 +62,16 @@ public class GameManager : MonoBehaviour
         }
         if(_timer <=0)
         {
-            _timer = 0;
-            _timeUpText.transform.DOScale(2f, 0.1f);
-            _timeUpText.material.DOColor(Color.red, 0.5f);
-            _timeUpText.text = "Time Up!";  
+            _timer = 0; 
             _isStarted = false;
+            _timeUpObj.SetActive(true);
+            Invoke(nameof(_fadeManager.FadeOut), 2.0f);
         }
     }
     /// <summary>カウントダウンのタイマー</summary>
-    private IEnumerator CountDownTimer()
+    public IEnumerator CountDownTimer()
     {
+        _fadeManager.FadeIn();
         yield return new WaitForSeconds(1.0f);
         for(int i = 3;i>=0;i--)
         {
